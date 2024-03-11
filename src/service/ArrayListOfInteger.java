@@ -1,23 +1,24 @@
 package service;
 
 import java.util.Arrays;
+import java.util.Objects;
 
-public class ArrayListOfString implements StringList {
-    public ArrayListOfString(String[] array, int size) {
+public class ArrayListOfInteger implements IntegerList {
+    public ArrayListOfInteger(Integer[] array, int size) {
         this.array = array;
         this.size = size;
     }
 
     private static final int INITIAL_CAPACITY = 10;
-    private String[] array;
+    private Integer[] array;
     private int size;
 
-    public ArrayListOfString() {
-        this.array = new String[INITIAL_CAPACITY];
+    public ArrayListOfInteger() {
+        this.array = new Integer[INITIAL_CAPACITY];
         this.size = 0;
     }
     @Override
-    public String add(String item) {
+    public Integer add(Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Null item cannot be added.");
         }
@@ -28,7 +29,7 @@ public class ArrayListOfString implements StringList {
     }
 
     @Override
-    public String add(int index, String item) {
+    public Integer add(int index, Integer item) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index is out of bounds.");
         }
@@ -43,20 +44,20 @@ public class ArrayListOfString implements StringList {
     }
 
     @Override
-    public String set(int index, String item) {
+    public Integer set(int index, Integer item) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index is out of bounds.");
         }
         if (item == null) {
             throw new IllegalArgumentException("Null item cannot be set.");
         }
-        String oldValue = array[index];
+        Integer oldValue = array[index];
         array[index] = item;
         return oldValue;
     }
 
     @Override
-    public String remove(String item) {
+    public Integer remove(Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Null item cannot be removed.");
         }
@@ -69,11 +70,11 @@ public class ArrayListOfString implements StringList {
     }
 
     @Override
-    public String remove(int index) {
+    public Integer remove(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index is out of bounds.");
         }
-        String removedItem = array[index];
+        Integer removedItem = array[index];
         System.arraycopy(array, index + 1, array, index, size - index - 1);
         array[size - 1] = null; // Clear the reference to the last element
         size--;
@@ -81,17 +82,14 @@ public class ArrayListOfString implements StringList {
     }
 
     @Override
-    public boolean contains(String item) {
-        for (int i = 0; i < size; i++) {
-            if (item.equals(array[i])) {
-                return true;
-            }
-        }
-        return false;
+    public boolean contains(Integer item) {
+        Integer[] storCopy = toArray();
+        sort(storCopy);
+        return binarySearch(storCopy, item);
     }
 
     @Override
-    public int indexOf(String item) {
+    public int indexOf(Integer item) {
         for (int i = 0; i < size; i++) {
             if (item.equals(array[i])) {
                 return i;
@@ -101,7 +99,7 @@ public class ArrayListOfString implements StringList {
     }
 
     @Override
-    public int lastIndexOf(String item) {
+    public int lastIndexOf(Integer item) {
         for (int i = size - 1; i >= 0; i--) {
             if (item.equals(array[i])) {
                 return i;
@@ -111,7 +109,7 @@ public class ArrayListOfString implements StringList {
     }
 
     @Override
-    public String get(int index) {
+    public Integer get(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index is out of bounds.");
         }
@@ -119,7 +117,7 @@ public class ArrayListOfString implements StringList {
     }
 
     @Override
-    public boolean equals(StringList otherList) {
+    public boolean equals(IntegerList otherList) {
         if (otherList == null) {
             throw new IllegalArgumentException("Other list cannot be null.");
         }
@@ -153,7 +151,7 @@ public class ArrayListOfString implements StringList {
     }
 
     @Override
-    public String[] toArray() {
+    public Integer[] toArray() {
 
         return Arrays.copyOf(array, size);
     }
@@ -164,5 +162,37 @@ public class ArrayListOfString implements StringList {
             int newCapacity = Math.max(array.length * 2, minCapacity);
             array = Arrays.copyOf(array, newCapacity);
         }
+    }
+
+    private void sort(Integer[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int temp = arr[i];
+            int j = i;
+            while (j > 0 && arr[j - 1] > temp) {
+                arr[j] = arr[j - 1];
+                j--;
+            }
+            arr[j] = temp;
+        }
+    }
+
+    private boolean binarySearch(Integer[] arr, Integer item) {
+        int min = 0;
+        int max = arr.length - 1;
+
+        while (min <= max) {
+            int mid = (min + max) / 2;
+
+            if (Objects.equals(item, arr[mid])) {
+                return true;
+            }
+
+            if (item < arr[mid]) {
+                max = mid - 1;
+            } else {
+                min = mid + 1;
+            }
+        }
+        return false;
     }
 }

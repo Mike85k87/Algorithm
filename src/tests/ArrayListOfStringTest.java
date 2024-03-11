@@ -1,109 +1,113 @@
 package tests;
 
-import service.ArrayListOfString;
+import service.ArrayListOfInteger;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.Optional;
+
+import static org.junit.Assert.assertEquals;
+
 public class ArrayListOfStringTest {
-    private ArrayListOfString list;
+    private ArrayListOfInteger list;
 
     @Before
     public void setUp() {
-        list = new ArrayListOfString();
-        list.add("Apple");
-        list.add("Banana");
-        list.add("Cherry");
+        list = new ArrayListOfInteger();
+        list.add(0);
+        list.add(1);
+        list.add(2);
     }
 
     @Test
     public void testAdd() {
-        assertEquals("Apple", list.get(0));
-        assertEquals("Banana", list.get(1));
-        assertEquals("Cherry", list.get(2));
+        assertEquals(0, Optional.ofNullable(list.add(0)));
+        assertEquals(22, Optional.ofNullable(list.get(1)));
+        assertEquals(33, Optional.ofNullable(list.get(2)));
     }
 
     @Test
     public void testAddAtIndex() {
-        list.add(1, "Grape");
-        assertEquals("Grape", list.get(1));
-        assertEquals("Banana", list.get(2));
+        assertEquals(Optional.of(11), list.get(0));
+        assertEquals("22", list.get(1));
+        assertEquals("33", list.get(2));
     }
 
     @Test
     public void testSet() {
-        assertEquals("Banana", list.set(1, "Grape"));
-        assertEquals("Grape", list.get(1));
+        assertEquals("22", list.set(1,1));
+        assertEquals("33", list.get(1));
     }
 
     @Test
     public void testRemove() {
-        assertEquals("Banana", list.remove("Banana"));
-        assertFalse(list.contains("Banana"));
+        assertEquals("22", list.remove(33));
+        Assert.assertFalse(list.contains(44));
     }
 
     @Test
     public void testRemoveAtIndex() {
-        assertEquals("Banana", list.remove(1));
-        assertFalse(list.contains("Banana"));
+        assertEquals("22", list.remove(1));
+        Assert.assertFalse(list.contains(33));
     }
 
     @Test
     public void testContains() {
-        assertTrue(list.contains("Apple"));
-        assertFalse(list.contains("Orange"));
+        Assert.assertTrue(list.contains(22));
+        Assert.assertFalse(list.contains(33));
     }
 
     @Test
     public void testIndexOf() {
-        assertEquals(0, list.indexOf("Apple"));
-        assertEquals(-1, list.indexOf("Orange"));
+        assertEquals(0, list.indexOf(11));
+        assertEquals(-1, list.indexOf(33));
     }
 
     @Test
     public void testLastIndexOf() {
-        list.add("Apple"); // Adding another "Apple"
-        assertEquals(3, list.lastIndexOf("Apple"));
-        assertEquals(-1, list.lastIndexOf("Orange"));
+        list.add(12); // Adding another "Apple"
+        assertEquals(3, list.lastIndexOf(12));
+        assertEquals(-1, list.lastIndexOf(13));
     }
 
     @Test
     public void testGet() {
-        assertEquals("Cherry", list.get(2));
+        assertEquals("33", list.get(2));
     }
 
     @Test
     public void testEquals() {
-        ArrayListOfString otherList = new ArrayListOfString();
-        otherList.add("Apple");
-        otherList.add("Banana");
-        otherList.add("Cherry");
-        assertTrue(list.equals(otherList));
+        ArrayListOfInteger otherList = new ArrayListOfInteger();
+        otherList.add(11);
+        otherList.add(22);
+        otherList.add(33);
+        Assert.assertTrue(list.equals(otherList));
     }
 
     @Test
     public void testSize() {
         assertEquals(3, list.size());
-        list.remove("Banana");
+        list.remove(33);
         assertEquals(2, list.size());
     }
 
     @Test
     public void testIsEmpty() {
-        assertFalse(list.isEmpty());
+        Assert.assertFalse(list.isEmpty());
         list.clear();
-        assertTrue(list.isEmpty());
+        Assert.assertTrue(list.isEmpty());
     }
 
     @Test
     public void testClear() {
         list.clear();
-        assertTrue(list.isEmpty());
+        Assert.assertTrue(list.isEmpty());
     }
 
     @Test
     public void testToArray() {
-        String[] array = list.toArray();
-        assertArrayEquals(new String[]{"Apple", "Banana", "Cherry"}, array);
+        Integer[] array = list.toArray();
+        Assert.assertArrayEquals(new Integer[]{11, 22, 33}, array);
     }
 }
