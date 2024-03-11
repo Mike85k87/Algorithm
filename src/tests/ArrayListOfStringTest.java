@@ -1,9 +1,9 @@
 package tests;
 
-import service.ArrayListOfInteger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import service.ArrayListOfInteger;
 
 import java.util.Optional;
 
@@ -22,7 +22,7 @@ public class ArrayListOfStringTest {
 
     @Test
     public void testAdd() {
-        assertEquals(0, Optional.ofNullable(list.add(0)));
+        assertEquals(Optional.of(0), list.add(0));
         assertEquals(22, Optional.ofNullable(list.get(1)));
         assertEquals(33, Optional.ofNullable(list.get(2)));
     }
